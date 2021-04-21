@@ -5,18 +5,20 @@ import { User } from './interfaces/User';
 
 interface Settings {
   clientId: string;
+  authUrlBase: string;
+  cookieName: string;
 }
 
 interface ExtendedRequest extends Request {
   user?: User;
 }
 
-export function authorizedMiddlewareFactory({ clientId }: Settings) {
+export function authorizedMiddlewareFactory({ clientId, authUrlBase, cookieName }: Settings) {
   return () => (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const cookieService = cookieServiceFactory(req, res);
-    const authService = authServiceFactory({ clientId });
+    const cookieService = cookieServiceFactory({ cookieName });
+    const authService = authServiceFactory({ clientId, authUrlBase });
 
-    const token = cookieService.getToken();
+    const token = cookieService.getToken(req, res);
 
     if (!token) {
       res.status(401).end();

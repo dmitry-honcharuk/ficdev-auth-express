@@ -1,15 +1,19 @@
 import Cookies from 'cookies';
 import { IncomingMessage, ServerResponse } from 'http';
-import { TOKEN_COOKIE_NAME } from './constants';
 
 export interface CookieService {
-  getToken: () => string | undefined;
+  getToken: (req: IncomingMessage, res: ServerResponse) => string | undefined;
 }
 
-export function cookieServiceFactory(req: IncomingMessage, res: ServerResponse): CookieService {
-  const cookies = new Cookies(req, res);
+interface FactoryOptions {
+  cookieName: string;
+}
 
+export function cookieServiceFactory(options: FactoryOptions): CookieService {
   return {
-    getToken: () => cookies.get(TOKEN_COOKIE_NAME),
+    getToken: (req: IncomingMessage, res: ServerResponse) => {
+      const cookies = new Cookies(req, res);
+      return cookies.get(options.cookieName);
+    },
   };
 }
