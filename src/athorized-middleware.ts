@@ -6,7 +6,7 @@ import { User } from './interfaces/User';
 interface Settings {
   clientId: string;
   authUrlBase: string;
-  cookieName: string;
+  cookieName?: string;
 }
 
 interface ExtendedRequest extends Request {
