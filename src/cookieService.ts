@@ -6,14 +6,17 @@ export interface CookieService {
 }
 
 interface FactoryOptions {
-  cookieName: string;
+  cookieName?: string;
 }
 
 export function cookieServiceFactory(options: FactoryOptions): CookieService {
+  const { cookieName = 'ficdev-auth-token' } = options;
+
   return {
     getToken: (req: IncomingMessage, res: ServerResponse) => {
       const cookies = new Cookies(req, res);
-      return cookies.get(options.cookieName);
+
+      return cookies.get(cookieName);
     },
   };
 }
