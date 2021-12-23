@@ -25,7 +25,7 @@ export function authorizedMiddlewareFactory({
     const authService = authServiceFactory({ clientId, authUrlBase });
 
     const cookieToken = cookieService.getToken(req, res);
-    const headerToken = req.header(tokenHeaderName);
+    const headerToken = req.headers[tokenHeaderName];
 
     if (!cookieToken && !headerToken) {
       res.status(401).end();
